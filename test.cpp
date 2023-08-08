@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <vector>
 #include <cmath>
+#include <vector>
 class Shape
 {
 protected:
@@ -46,11 +47,13 @@ int main()
 {
     Circle a(5);
     Triangle b(5);
-    Shape* shape1 = &a;
-    std::cout << shape1->Perimeter() << ' ';
-    std::cout << shape1->FindArea() << '\n';
-    Shape* shape2 = &b;
-    std::cout << shape2->Perimeter() << ' ';
-    std::cout << shape2->FindArea();
+    std::vector<Shape*> vec;
+    vec.push_back(&a);
+    vec.push_back(&b);
+    for (Shape* x : vec)
+    {
+        std::cout << x->FindArea() << ' ';
+        std::cout << x->Perimeter() << '\n';
+    }
 }
 
