@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <vector>
+
 class GameObject
 {
 protected:
@@ -8,6 +9,7 @@ protected:
     int sprite;
     static std::vector<GameObject*> vec;
 public:
+
     GameObject()
     {
         this->position = 0;
@@ -20,9 +22,8 @@ public:
         this->position = position;
         this->health = health;
         this->sprite = sprite;
-        vec.push_back(this);
+        GameObject::vec.push_back(this);
     }
-
     virtual void update(int NewPosition, int NewHealth, int NewSprite)
     {
         std::cout << "---------GAMEOBJECT UPDATE---------\n";
@@ -31,14 +32,19 @@ public:
         this->sprite = NewSprite;
     }
 
+    int GetPosition()
+    {
+        return position;
+    }
+
     virtual bool CollisionDetect()
     {
-        std::cout << "GAMEOBJECT COLLISION DETECTION...";
+        std::cout << "GAMEOBJECT COLLISION DETECTION...\n";
         for (int i = 0; i < this->vec.size(); i++)
         {
             for (int j = 0; j < this->vec.size(); j++)
             {
-                if (this->vec[i]->position == this->vec[j]->position)
+                if (i != j && GameObject::vec[i]->GetPosition() == GameObject::vec[j]->GetPosition())
                 {
                     return true;
                 }
@@ -47,6 +53,8 @@ public:
         return false;
     }
 };
+
+std::vector<GameObject*> GameObject::vec = {};
 
 class Player : public GameObject
 {
@@ -71,12 +79,12 @@ public:
 
     bool CollisionDetect() override
     {
-        std::cout << "PLAYER COLLISION DETECTION...";
+        std::cout << "PLAYER COLLISION DETECTION...\n";
         for (int i = 0; i < this->vec.size(); i++)
         {
             for (int j = 0; j < this->vec.size(); j++)
             {
-                if (this->vec[i]->position == this->vec[j]->position)
+                if (i != j && GameObject::vec[i]->GetPosition() == GameObject::vec[j]->GetPosition())
                 {
                     return true;
                 }
@@ -109,7 +117,18 @@ public:
 
     bool CollisionDetect() override
     {
-        std::cout << "ENEMY COLLISION DETECTION...";
+        std::cout << "ENEMY COLLISION DETECTION...\n";
+        for (int i = 0; i < this->vec.size(); i++)
+        {
+            for (int j = 0; j < this->vec.size(); j++)
+            {
+                if (i != j && GameObject::vec[i]->GetPosition() == GameObject::vec[j]->GetPosition())
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 };
 
@@ -136,14 +155,24 @@ public:
 
     bool CollisionDetect() override
     {
-        std::cout << "OBSTACLE COLLISION DETECTION...";
+        std::cout << "OBSTACLE COLLISION DETECTION...\n";
+        for (int i = 0; i < this->vec.size(); i++)
+        {
+            for (int j = 0; j < this->vec.size(); j++)
+            {
+                if (i != j && GameObject::vec[i]->GetPosition() == GameObject::vec[j]->GetPosition())
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 };
 
 int main()
 {
-    Player a(1,1,3);
-    Enemy b(2,1,2);
-    Obstacle c(3,2,1);
-    std::cout<<a.CollisionDetect();
+    Player b1(1,2,3);
+    Enemy c1(2,2,3);
+    std::cout<<b1.CollisionDetect();
 }
